@@ -23,9 +23,25 @@ server.get('/api/users', (req, res) => {
       res.send(users);
     })
     .catch(error => {
-      res.send(error);
+        res.status(500).json({ error: 'The users information could not be retrieved.' });
     });
 });
+
+server.get('/api/users/:id', (req, res) => {
+    // get a user base on the id from the database
+    const id = req.params.id;
+    userModel
+      .find(id)
+      .then(user => {
+        // send the user back to the client
+        res.send(user);
+      })
+      .catch(error => {
+          res.status(500).json({ error: 'The users information could not be retrieved.' });
+      });
+  });
+
+
 
 // add a hub
 server.post('/api/users', (req, res) => {
@@ -41,12 +57,14 @@ server.post('/api/users', (req, res) => {
     // add the user to the database
     userModel
       .add(userData)
+      
       .then(user => {
         // send the user back to the client
+        res.status(201);
         res.json(user); //.json() will set the right headers and convert to JSON
       })
       .catch(error => {
-        res.json({ message: 'ERROR cannot save user!' });
+        res.status(500).json({ error: 'There was an error while saving the user to the database' });
       });
   }
 });
