@@ -62,7 +62,7 @@ server.post('/api/users', (req, res) => {
   } else {
     // add the user to the database
     userModel
-      .add(userData)
+      .insert(userData)
       
       .then(user => {
         // send the user back to the client
