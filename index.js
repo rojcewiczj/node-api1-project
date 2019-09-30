@@ -1,7 +1,7 @@
 // implement your API here
 const express = require('express');
 
-const UserModel = require('./data/db.js'); // <<<<< require data access
+const userModel = require('./data/db.js'); // <<<<< require data access
 
 const server = express();
 
@@ -16,7 +16,7 @@ server.get('/', (req, res) => {
 
 server.get('/api/users', (req, res) => {
   // get a list of users from the database
-  UserModel
+  userModel
     .find()
     .then(users => {
       // send the list of users back to the client
@@ -31,15 +31,15 @@ server.get('/api/users', (req, res) => {
 server.post('/api/users', (req, res) => {
   // axios.post(url, data);
   // get the user data from the request
-  const UserData = req.body;
+  const userData = req.body;
 
   // validate the data sent by he client
   // NEVER TRUST THE CLIENT!!!!!
-  if (!UserData.name) {
-    res.status(400).json({ message: 'who goes there!!?' });
+  if (!userData.name || !userData.bio) {
+    res.status(400).json({ errorMessage: 'who goes there!!?, Please provide name and bio for the user.' });
   } else {
-    // add the uer to the database
-    UserModel
+    // add the user to the database
+    userModel
       .add(userData)
       .then(user => {
         // send the user back to the client
@@ -55,7 +55,7 @@ server.delete('/api/users/:id', (req, res) => {
   // axios.delete('/users/2')
   const id = req.params.id; // params is an object with all the url parameters
 
-  UserModel
+  userModel
     .remove(id)
     .then(user => {
       // send the user back to the client
@@ -70,7 +70,7 @@ server.put('/users/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
 
-  hubsModel
+  userModel
     .update(id, changes)
     .then(hub => {
       // send the user back to the client
