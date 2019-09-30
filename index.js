@@ -30,18 +30,20 @@ server.get('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
     // get a user base on the id from the database
     const id = req.params.id;
-      if(!id) {
-      res.status(404).json({ message: 'The user with the specified ID does not exist.' });
-    }
+      
     userModel
-      .find(id)
+      .findById(id)
       .then(user => {
-        // send the user back to the client
+        // send the user back to the client 
+        if(!user) {
+      res.status(404).json({ message: 'The user with the specified ID does not exist.' });
+    } 
         res.send(user);
       })
       .catch(error => {
           res.status(500).json({ error: 'The user information could not be retrieved.' });
       });
+    
   });
 
 
@@ -74,32 +76,50 @@ server.post('/api/users', (req, res) => {
 
 server.delete('/api/users/:id', (req, res) => {
   // axios.delete('/users/2')
+  
   const id = req.params.id; // params is an object with all the url parameters
+ 
+  
 
   userModel
     .remove(id)
     .then(user => {
+       if(!user) {
+    res.status(404).json({ message: 'The user with the specified ID does not exist.' });
+  }
       // send the user back to the client
       res.json(user); //.json() will set the right headers and convert to JSON
     })
     .catch(error => {
-      res.json({ message: 'error deleting the user!!!' });
+      res.status(500).json({ error: 'the user could not be removed' });
     });
+  
 });
 
 server.put('/users/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
-
+ 
+  if  (!changes.name || !changes.bio) {
+    res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' });
+  }
+  else {
+  
   userModel
     .update(id, changes)
-    .then(hub => {
+    .then(user => {
       // send the user back to the client
+     if(!user) {
+    res.status(404).json({ message: 'The user with the specified ID does not exist.' });
+  }
+
+      res.status(201);
       res.json(user); //.json() will set the right headers and convert to JSON
     })
     .catch(error => {
-      res.json({ message: 'error updating the user' });
+      res.json({ error: "The user information could not be modified." });
     });
+  }
 });
 
 const port = 8000;
