@@ -1,11 +1,12 @@
 // implement your API here
 const express = require('express');
-
+const cors = require('cors');
 const userModel = require('./data/db.js'); // <<<<< require data access
 
 const server = express();
 
 // middleware
+server.use(cors());
 // teach express how to read JSON fro the request body
 server.use(express.json()); // <<<<<<<<<<<<<<<<<<<<<<<<<< we need this for POST and PUT
 
@@ -96,7 +97,7 @@ server.delete('/api/users/:id', (req, res) => {
   
 });
 
-server.put('/users/:id', (req, res) => {
+server.put('/api/users/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
  
