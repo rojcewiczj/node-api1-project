@@ -30,6 +30,9 @@ server.get('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
     // get a user base on the id from the database
     const id = req.params.id;
+      if(!id) {
+      res.status(404).json({ message: 'The user with the specified ID does not exist.' });
+    }
     userModel
       .find(id)
       .then(user => {
@@ -37,7 +40,7 @@ server.get('/api/users/:id', (req, res) => {
         res.send(user);
       })
       .catch(error => {
-          res.status(500).json({ error: 'The users information could not be retrieved.' });
+          res.status(500).json({ error: 'The user information could not be retrieved.' });
       });
   });
 
