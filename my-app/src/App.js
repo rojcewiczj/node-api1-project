@@ -1,18 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-const initialHobbit = {
-  id:'',
-  name: '',
-  bio:'',
-  created_at: '',
-   updated_at :'',
-};
+import Hobbits from "./Hobbits"
+  
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-      
+      <Hobbits />
       </header>
     </div>
   );
