@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { axiosWithAuth } from "./axiosWithAuth";
 const Hobbits = () => {
 const initialHobbit = {
     id:'',
@@ -15,8 +15,8 @@ const initialHobbit = {
         getData();
       }, []);
       const getData = () => {
-      axios
-          .get('api/users/')
+      axiosWithAuth()
+          .get('/users/')
           .then(res => updateHobbit(res.data))
           .catch(error => console.log(error));
       }
